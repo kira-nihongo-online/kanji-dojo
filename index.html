@@ -40,6 +40,11 @@
         color: #222;
       }
 
+      #progressArea {
+        font-size: 15px;
+        margin-top: 2px;
+      }
+
       /* ★ 追加：スコア表示 */
       #scoreArea {
         font-size: 18px;
@@ -112,10 +117,6 @@
         background-color: #16a34a;
       }
 
-      .correct-btn:active {
-        background-color: #16a34a;
-      }
-
       @media (min-width: 768px) {
         #img1 {
           margin-top: 8vh;
@@ -128,7 +129,10 @@
 
     <div class="titleArea">
       <img src="トータルロゴ.png" class="titleLogo">
-      <div class="titleText">漢字道場</div>
+      <div>
+        <div class="titleText">漢字道場</div>
+        <div id="progressArea">0 / 0</div>
+      </div>
     </div>
 
     <div id="cardContainer">
@@ -149,6 +153,7 @@
         </div>
 
       </div>
+   </div>
 
 <script>
   let cards = [];
@@ -180,6 +185,7 @@
       if (cards.length > 0) {
         displayCard();
         preloadNext();
+        updateScore();
       }
     });
 
@@ -214,12 +220,17 @@
 
     displayCard();
     preloadNext();
+    updateScore();
   });
 
   /* ★ 追加：スコア表示更新 */
   function updateScore() {
+
     document.getElementById("scoreArea").textContent =
       "正解：" + correctCount + " / " + cards.length;
+
+    document.getElementById("progressArea").textContent =
+      (currentIndex + 1) + " / " + cards.length;
   }
 
   /* ★ 追加：正解ボタン動作 */
