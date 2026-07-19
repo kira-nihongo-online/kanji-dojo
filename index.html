@@ -230,11 +230,20 @@
 
     if (cards.length === 0) return;
 
-    showingFront = true;
+    if (!showingFront) {
 
-    currentIndex--;
-    if (currentIndex < 0) {
-      currentIndex = cards.length - 1;
+      // 裏 → 表
+      showingFront = true;
+
+    } else {
+
+      // 表 → 前のカードの裏
+      currentIndex--;
+      if (currentIndex < 0) {
+        currentIndex = cards.length - 1;
+      }
+
+      showingFront = false;
     }
 
     displayCard();
