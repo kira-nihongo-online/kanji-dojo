@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: sans-serif;
+        text-align: center;
+      }
+
+      body {
+        padding-bottom: 28vh;
+      }
+
+      h2 {
+        margin: 10px 0 5px 0;
+        font-size: 18px;
+      }
+
+      /* ★ 追加：スコア表示 */
+      #scoreArea {
+        font-size: 16px;
+        margin-bottom: 6px;
+      }
+
+      #cardContainer {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto 10px auto;
+      }
+
+      #img1 {
+        width: 90%;
+        max-width: 550px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+        transition: opacity 0.15s ease;
+      }
+
+      .answer-area {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 28vh;
+        background: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 15px;
+        box-shadow: 0 -3px 8px rgba(0,0,0,0.15);
+      }
+
+      .answer-box {
+        width: 85%;
+        border: none;
+        font-size: 16px;
+        text-align: center;
+
+        /* ★ 追加：右下固定用 */
+        position: relative;
+      }
+
+      /* ★ 追加：正解ボタン */
+      .correct-btn {
+        position: absolute;
+        right: 10px;
+        bottom: -15px;   /* ← ここをマイナスにする */
+        width: 110px;
+        height: 46px;
+        font-size: 16px;
+        border: none;
+        border-radius: 12px;
+        background-color: #22c55e;
+        color: white;
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      }
+
+      .correct-btn:active {
+        background-color: #16a34a;
+      }
+
+      @media (min-width: 768px) {
+        #img1 {
+          margin-top: 8vh;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <h2>🟢แบบฝึกทดสอบคันจิ</h2>
+
+    <!-- ★ 追加：スコア表示 -->
+    <div id="scoreArea">正解：0 / 0</div>
+
+    <div id="cardContainer">
+      <img id="img1" referrerpolicy="no-referrer">
+    </div>
+
+    <div class="answer-area">
+      <div class="answer-box">
+        ✏ เขียนคำตอบลงในสมุดก่อน แล้วแตะหน้าจอเพื่อดูคำตอบ
+
+        <!-- ★ 追加：右下固定ボタン -->
+        <button id="correctBtn" class="correct-btn">
+          ✔ 正解
+        </button>
+      </div>
+    </div>
+
+<script>
+  let cards = [];
+  let currentIndex = 0;
+  let showingFront = true;
+
+  /* ★ 追加：スコア管理 */
+  let correctCount = 0;
+  let answered = [];
+
+  const lesson = <?= lesson ?>;
+  const img1 = document.getElementById("img1");
+
+  google.script.run
+    .withSuccessHandler(function(data) {
+      cards = data || [];
+      currentIndex = 0;
+      showingFront = true;
+
+      /* ★ 追加 */
+      answered = new Array(cards.length).fill(false);
+      correctCount = 0;
+      updateScore();
+
+      if (cards.length > 0) {
+        displayCard();
+        preloadNext();
+      }
+    })
+    .getLessonData(lesson);
+
+  function displayCard() {
+    if (cards.length === 0) return;
+
+    img1.src = showingFront
+      ? cards[currentIndex].front
+      : cards[currentIndex].back;
+  }
+
+  function preloadNext() {
+    if (cards.length === 0) return;
+
+    const nextIndex = (currentIndex + 1) % cards.length;
+
+    new Image().src = cards[currentIndex].back;
+    new Image().src = cards[nextIndex].front;
+  }
+
+  document.addEventListener("click", function(e) {
+    if (e.target.closest(".answer-area")) return;
+    if (cards.length === 0) return;
+
+    if (showingFront) {
+      showingFront = false;
+    } else {
+      showingFront = true;
+      currentIndex++;
+      if (currentIndex >= cards.length) currentIndex = 0;
+    }
+
+    displayCard();
+    preloadNext();
+  });
+
+  /* ★ 追加：スコア表示更新 */
+  function updateScore() {
+    document.getElementById("scoreArea").textContent =
+      "正解：" + correctCount + " / " + cards.length;
+  }
+
+  /* ★ 追加：正解ボタン動作 */
+  document.getElementById("correctBtn").addEventListener("click", function(e) {
+    e.stopPropagation();
+
+    if (!answered[currentIndex]) {
+      answered[currentIndex] = true;
+      correctCount++;
+      updateScore();
+    }
+  });
+</script>
+
+  </body>
+</html>
