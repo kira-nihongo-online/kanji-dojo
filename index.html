@@ -42,8 +42,8 @@
 
       /* ★ 追加：スコア表示 */
       #scoreArea {
-        font-size: 16px;
-        margin-bottom: 6px;
+        font-size: 18px;
+        font-weight: bold;
       }
 
       #cardContainer {
@@ -84,11 +84,16 @@
         position: relative;
       }
 
-      /* ★ 追加：正解ボタン */
+      .bottomArea {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 18px;
+      }
+
+      /* ★ 正解ボタン */
       .correct-btn {
-        position: absolute;
-        right: 10px;
-        bottom: -15px;   /* ← ここをマイナスにする */
+        position: static;
         width: 110px;
         height: 46px;
         font-size: 16px;
@@ -98,6 +103,12 @@
         color: white;
         font-weight: bold;
         box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .correct-btn:active {
+        background-color: #16a34a;
       }
 
       .correct-btn:active {
@@ -119,23 +130,24 @@
       <div class="titleText">漢字道場</div>
     </div>
 
-    <!-- ★ 追加：スコア表示 -->
-    <div id="scoreArea">正解：0 / 0</div>
-
     <div id="cardContainer">
       <img id="img1" referrerpolicy="no-referrer">
     </div>
 
     <div class="answer-area">
       <div class="answer-box">
+
         ✏ เขียนคำตอบลงในสมุดก่อน แล้วแตะหน้าจอเพื่อดูคำตอบ
 
-        <!-- ★ 追加：右下固定ボタン -->
-        <button id="correctBtn" class="correct-btn">
-          ✔ 正解
-        </button>
+        <div class="bottomArea">
+          <div id="scoreArea">正解：0 / 0</div>
+
+          <button id="correctBtn" class="correct-btn">
+            ✔ 正解
+          </button>
+        </div>
+
       </div>
-    </div>
 
 <script>
   let cards = [];
