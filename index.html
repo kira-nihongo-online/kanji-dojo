@@ -124,16 +124,20 @@
   let correctCount = 0;
   let answered = [];
 
-  const lesson = <?= lesson ?>;
+  const API_URL = "https://script.google.com/macros/s/AKfycbz7D_uzRRD9ARfOpK_MQ4IZ1YifyxqJmNPIRFijQJo4zSu14gbI9VnmcOzIwVMRi88/exec";
+
+  const lesson = new URLSearchParams(location.search).get("lesson");
+
   const img1 = document.getElementById("img1");
 
-  google.script.run
-    .withSuccessHandler(function(data) {
+  fetch(API_URL + "?lesson=" + lesson)
+    .then(response => response.json())
+    .then(function(data) {
+
       cards = data || [];
       currentIndex = 0;
       showingFront = true;
 
-      /* ★ 追加 */
       answered = new Array(cards.length).fill(false);
       correctCount = 0;
       updateScore();
@@ -142,8 +146,7 @@
         displayCard();
         preloadNext();
       }
-    })
-    .getLessonData(lesson);
+    });
 
   function displayCard() {
     if (cards.length === 0) return;
