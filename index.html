@@ -21,6 +21,25 @@
         font-size: 18px;
       }
 
+      .titleArea {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin: 12px 0 6px;
+      }
+
+      .titleLogo {
+        width: 44px;
+        height: 44px;
+      }
+
+      .titleText {
+        font-size: 28px;
+        font-weight: bold;
+        color: #222;
+      }
+
       /* ★ 追加：スコア表示 */
       #scoreArea {
         font-size: 16px;
@@ -95,7 +114,10 @@
 
   <body>
 
-    <h2>🟢แบบฝึกทดสอบคันจิ</h2>
+    <div class="titleArea">
+      <img src="トータルロゴ.png" class="titleLogo">
+      <div class="titleText">漢字道場</div>
+    </div>
 
     <!-- ★ 追加：スコア表示 -->
     <div id="scoreArea">正解：0 / 0</div>
