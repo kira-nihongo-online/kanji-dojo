@@ -103,10 +103,10 @@
       }
 
       .bottomArea{
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          gap: 10px;     /* 16px → 8px に縮める */
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          margin-bottom:8px;
       }
 
       /* ★ 正解ボタン */
@@ -135,6 +135,18 @@
         }
       }
 
+      .message{
+          flex:1;
+          text-align:left;
+          font-size:16px;
+      }
+
+      .rightArea{
+          display:flex;
+          align-items:center;
+          gap:8px;
+      }
+
     </style>
   </head>
 
@@ -156,19 +168,26 @@
       <div class="answer-box">
 
         <div class="bottomArea">
-          <div>
-            ✏ เขียนคำตอบลงในสมุดก่อน แล้วแตะหน้าจอเพื่อดูคำตอบ
-          </div>
 
-          <div id="scoreArea">正解：0 / 0</div>
+            <div class="message">
+                ✏ เขียนคำตอบลงในสมุดก่อน แล้วแตะหน้าจอเพื่อดูคำตอบ
+            </div>
 
-          <button id="correctBtn" class="correct-btn">
-            ✔ 正解
-          </button>
+            <div class="rightArea">
+
+                <div id="scoreArea">
+                    正解：0 / 0
+                </div>
+
+                <button id="correctBtn" class="correct-btn">
+                    ✔ 正解
+                </button>
+
+            </div>
+
         </div>
 
         <canvas id="writeArea"></canvas>
-
       </div>
    </div>
 
