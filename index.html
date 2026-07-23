@@ -129,6 +129,24 @@
         background-color: #16a34a;
       }
 
+      /* ★ クリアボタン */
+      .clear-btn {
+          width: 90px;
+          height: 46px;
+          font-size: 15px;
+          border: none;
+          border-radius: 12px;
+          background-color: #6b7280;
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          flex-shrink: 0;
+      }
+
+      .clear-btn:active {
+          background-color: #4b5563;
+      }
+
       @media (min-width: 768px) {
         #img1 {
           margin-top: 8vh;
@@ -178,6 +196,10 @@
                 <div id="scoreArea">
                     正解：0 / 0
                 </div>
+
+                <button id="clearBtn" class="clear-btn">
+                    🗑 クリア
+                </button>
 
                 <button id="correctBtn" class="correct-btn">
                     ✔ 正解
@@ -324,6 +346,17 @@
       correctCount++;
       updateScore();
     }
+  });
+
+  // ===============================
+  // クリアボタン
+  // ===============================
+  document.getElementById("clearBtn").addEventListener("click", function(e) {
+
+      e.stopPropagation();
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   });
 
   // ===============================
