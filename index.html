@@ -91,6 +91,18 @@
         position: relative;
       }
 
+      #writeArea{
+                width:100%;
+                height:130px;
+
+                border:2px solid #ccc;
+                border-radius:10px;
+
+                background:white;
+
+                touch-action:none;
+            }      
+
       .bottomArea {
           display: flex;
           justify-content: flex-end;
@@ -124,6 +136,7 @@
           margin-top: 8vh;
         }
       }
+
     </style>
   </head>
 
@@ -144,7 +157,11 @@
     <div class="answer-area">
       <div class="answer-box">
 
-        ✏ เขียนคำตอบลงในสมุดก่อน แล้วแตะหน้าจอเพื่อดูคำตอบ
+        <div style="margin-bottom:10px;">
+          ✏ เขียนคำตอบลงในสมุดก่อน แล้วแตะหน้าจอเพื่อดูคำตอบ
+        </div>
+
+        <canvas id="writeArea"></canvas>
 
         <div class="bottomArea">
           <div id="scoreArea">正解：0 / 0</div>
