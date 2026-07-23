@@ -102,12 +102,11 @@
           touch-action:none;
       }
 
-      .bottomArea {
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          gap: 16px;
-          margin-top: 18px;
+      .bottomArea{
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          gap:16px;
       }
 
       /* ★ 正解ボタン */
@@ -156,19 +155,19 @@
     <div class="answer-area">
       <div class="answer-box">
 
-        <div style="margin-bottom:10px;">
-          ✏ เขียนคำตอบลงในสมุดก่อน แล้วแตะหน้าจอเพื่อดูคำตอบ
-        </div>
-
-        <canvas id="writeArea"></canvas>
-
         <div class="bottomArea">
+          <div>
+            ✏ เขียนคำตอบลงในสมุดก่อน แล้วแตะหน้าจอเพื่อดูคำตอบ
+          </div>
+
           <div id="scoreArea">正解：0 / 0</div>
 
           <button id="correctBtn" class="correct-btn">
             ✔ 正解
           </button>
         </div>
+
+        <canvas id="writeArea"></canvas>
 
       </div>
    </div>
