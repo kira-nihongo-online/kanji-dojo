@@ -415,6 +415,7 @@
 
 
   document.addEventListener("keydown", function(e) {
+    if (document.getElementById("modeModal").style.display === "flex") return;
 
     if (e.key === "Enter") {
       e.preventDefault();
