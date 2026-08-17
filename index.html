@@ -409,6 +409,7 @@
 
   document.addEventListener("click", function(e) {
     if (e.target.closest(".answer-area")) return;
+    if (e.target.closest("#modeModal")) return;
     nextCard();
   });
 
