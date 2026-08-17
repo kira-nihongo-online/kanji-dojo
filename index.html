@@ -443,9 +443,17 @@
 
   const modeModal = document.getElementById("modeModal");
   const modeSettingBtn = document.getElementById("modeSettingBtn");
+  
+  let modeBeforeOpen = learningMode;
 
   modeSettingBtn.addEventListener("click", function(e) {
     e.stopPropagation();
+
+    modeBeforeOpen = learningMode;
+
+    document.querySelector(
+      'input[name="learningMode"][value="' + learningMode + '"]'
+    ).checked = true;
 
     document.getElementById("modeModal").style.display = "flex";
   });
