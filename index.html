@@ -457,6 +457,12 @@
       document.getElementById("modeModal").style.display = "none";
     });
 
+    document.getElementById("modeCancelBtn").addEventListener("click", function(e) {
+      e.stopPropagation();
+
+      document.getElementById("modeModal").style.display = "none";
+    });
+
   });
 
   /* ★ 追加：正解ボタン動作 */
