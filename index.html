@@ -165,6 +165,59 @@
           gap:8px;
       }
 
+      /* =============================== */
+      /* 学習モード設定モーダル */
+      /* =============================== */
+
+      .mode-modal {
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.45);
+          z-index: 1000;
+
+          justify-content: center;
+          align-items: center;
+      }
+
+      .mode-modal-content {
+          width: 80%;
+          max-width: 360px;
+          background: white;
+          border-radius: 16px;
+          padding: 24px;
+          box-sizing: border-box;
+          text-align: left;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      }
+
+      .mode-modal-content h3 {
+          margin: 0 0 20px 0;
+          text-align: center;
+          font-size: 20px;
+      }
+
+      .mode-modal-content label {
+          display: block;
+          margin: 16px 0;
+          font-size: 17px;
+      }
+
+      .mode-modal-buttons {
+          display: flex;
+          justify-content: flex-end;
+          gap: 8px;
+          margin-top: 24px;
+      }
+
+      .mode-modal-buttons button {
+          padding: 10px 18px;
+          border: none;
+          border-radius: 10px;
+          font-size: 15px;
+          cursor: pointer;
+      }
+
     </style>
   </head>
 
@@ -177,6 +230,8 @@
         <div id="progressArea">0 / 0</div>
       </div>
     </div>
+
+    <button id="modeSettingBtn">⚙ Mode</button>
 
     <div id="cardContainer">
       <img id="img1" referrerpolicy="no-referrer">
@@ -221,6 +276,7 @@
   /* ★ 追加：スコア管理 */
   let correctCount = 0;
   let answered = [];
+  let learningMode = "normal";
 
   const API_URL = "https://script.google.com/macros/s/AKfycbz7D_uzRRD9ARfOpK_MQ4IZ1YifyxqJmNPIRFijQJo4zSu14gbI9VnmcOzIwVMRi88/exec";
 
@@ -264,16 +320,53 @@
     new Image().src = cards[nextIndex].front;
   }
 
+  function findNextUnansweredIndex(startIndex) {
+
+    for (let i = 1; i <= cards.length; i++) {
+
+      const index = (startIndex + i) % cards.length;
+
+      if (!answered[index]) {
+        return index;
+      }
+    }
+
+    return -1;
+  }
+
   function nextCard() {
 
     if (cards.length === 0) return;
 
     if (showingFront) {
+
       showingFront = false;
+
     } else {
+
       showingFront = true;
-      currentIndex++;
-      if (currentIndex >= cards.length) currentIndex = 0;
+
+      // ノーマルモード
+      if (learningMode === "normal") {
+
+        currentIndex++;
+
+        if (currentIndex >= cards.length) {
+          currentIndex = 0;
+        }
+
+      // 正解済みを次周回から除外するモード
+      } else {
+
+        const nextIndex = findNextUnansweredIndex(currentIndex);
+
+        if (nextIndex === -1) {
+          // 全部正解した
+          return;
+        }
+
+        currentIndex = nextIndex;
+      }
     }
 
     displayCard();
@@ -337,6 +430,19 @@
       (currentIndex + 1) + " / " + cards.length;
   }
 
+  // ===============================
+  // 学習モード設定
+  // ===============================
+
+  const modeModal = document.getElementById("modeModal");
+  const modeSettingBtn = document.getElementById("modeSettingBtn");
+
+  modeSettingBtn.addEventListener("click", function(e) {
+    e.stopPropagation();
+
+    modeModal.style.display = "flex";
+  });
+
   /* ★ 追加：正解ボタン動作 */
   document.getElementById("correctBtn").addEventListener("click", function(e) {
     e.stopPropagation();
@@ -347,7 +453,7 @@
       updateScore();
     }
   });
-
+ 
   // ===============================
   // クリアボタン
   // ===============================
@@ -441,6 +547,35 @@
   canvas.addEventListener("touchcancel", endDraw);
 
 </script>
+
+<!-- =============================== -->
+<!-- 学習モード設定モーダル -->
+<!-- =============================== -->
+
+<div id="modeModal" class="mode-modal">
+
+  <div class="mode-modal-content">
+
+    <h3>学習モード</h3>
+
+    <label>
+      <input type="radio" name="learningMode" value="normal" checked>
+      Normal
+    </label>
+
+    <label>
+      <input type="radio" name="learningMode" value="excludeCorrect">
+      Skip Correct
+    </label>
+
+    <div class="mode-modal-buttons">
+      <button id="modeCancelBtn">キャンセル</button>
+      <button id="modeSaveBtn">決定</button>
+    </div>
+
+  </div>
+
+</div>
 
   </body>
 </html>
