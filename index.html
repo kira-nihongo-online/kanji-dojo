@@ -443,6 +443,22 @@
     document.getElementById("modeModal").style.display = "flex";
   });
 
+  document.addEventListener("DOMContentLoaded", function() {
+
+    document.getElementById("modeSaveBtn").addEventListener("click", function(e) {
+      e.stopPropagation();
+
+      const selectedMode = document.querySelector(
+        'input[name="learningMode"]:checked'
+      ).value;
+
+      learningMode = selectedMode;
+
+      document.getElementById("modeModal").style.display = "none";
+    });
+
+  });
+
   /* ★ 追加：正解ボタン動作 */
   document.getElementById("correctBtn").addEventListener("click", function(e) {
     e.stopPropagation();
