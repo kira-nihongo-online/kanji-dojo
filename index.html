@@ -443,6 +443,10 @@
   const modeModal = document.getElementById("modeModal");
   const modeSettingBtn = document.getElementById("modeSettingBtn");
 
+  modeModal.addEventListener("click", function(e) {
+    e.stopPropagation();
+  });
+
   modeSettingBtn.addEventListener("click", function(e) {
     e.stopPropagation();
 
