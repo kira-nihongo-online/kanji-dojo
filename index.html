@@ -282,6 +282,7 @@
 <script>
   let cards = [];
   let currentIndex = 0;
+  let cardOrder = [];
   let showingFront = true;
 
   /* ★ 追加：スコア管理 */
@@ -301,6 +302,7 @@
     .then(function(data) {
 
       cards = data || [];
+      cardOrder = cards.map((_, index) => index);
       currentIndex = 0;
       showingFront = true;
 
@@ -318,9 +320,11 @@
   function displayCard() {
     if (cards.length === 0) return;
 
+    const card = cards[cardOrder[currentIndex]];
+
     img1.src = showingFront
-      ? cards[currentIndex].front
-      : cards[currentIndex].back;
+      ? card.front
+      : card.back;
   }
 
   function preloadNext() {
@@ -479,6 +483,13 @@
 
       learningOrder = selectedOrder;
       skipCorrect = document.getElementById("skipCorrect").checked;
+
+      if (learningOrder === "random") {
+        for (let i = cardOrder.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [cardOrder[i], cardOrder[j]] = [cardOrder[j], cardOrder[i]];
+        }
+      }
 
       document.getElementById("modeModal").style.display = "none";
     });
