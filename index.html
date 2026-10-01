@@ -330,10 +330,12 @@
   function preloadNext() {
     if (cards.length === 0) return;
 
+    const currentCard = cards[cardOrder[currentIndex]];
     const nextIndex = (currentIndex + 1) % cards.length;
+    const nextCard = cards[cardOrder[nextIndex]];
 
-    new Image().src = cards[currentIndex].back;
-    new Image().src = cards[nextIndex].front;
+    new Image().src = currentCard.back;
+    new Image().src = nextCard.front;
   }
 
   function findNextUnansweredIndex(startIndex) {
@@ -374,13 +376,24 @@
 
       } else {
 
-        const nextIndex = findNextUnansweredIndex(currentIndex);
+        let nextPosition = currentIndex;
 
-        if (nextIndex === -1) {
+        for (let i = 1; i <= cards.length; i++) {
+
+          const position = (currentIndex + i) % cards.length;
+          const cardIndex = cardOrder[position];
+
+          if (!answered[cardIndex]) {
+            nextPosition = position;
+            break;
+          }
+        }
+
+        if (answered[cardOrder[nextPosition]]) {
           return;
         }
 
-        currentIndex = nextIndex;
+        currentIndex = nextPosition;
       }
     }
 
@@ -403,6 +416,7 @@
 
       // 表 → 前のカードの裏
       currentIndex--;
+
       if (currentIndex < 0) {
         currentIndex = cards.length - 1;
       }
@@ -484,7 +498,14 @@
       learningOrder = selectedOrder;
       skipCorrect = document.getElementById("skipCorrect").checked;
 
-      if (learningOrder === "random") {
+      if (learningOrder === "normal") {
+
+        // Normalに戻す
+        cardOrder = cards.map((_, index) => index);
+
+      } else if (learningOrder === "random") {
+
+        // Randomにする
         for (let i = cardOrder.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [cardOrder[i], cardOrder[j]] = [cardOrder[j], cardOrder[i]];
@@ -492,6 +513,7 @@
       }
 
       document.getElementById("modeModal").style.display = "none";
+    });
     });
 
     document.getElementById("modeCancelBtn").addEventListener("click", function(e) {
@@ -502,12 +524,15 @@
 
   });
 
-  /* ★ 追加：正解ボタン動作 */
+  // ===============================
+  // ★ 追加：正解ボタン動作
   document.getElementById("correctBtn").addEventListener("click", function(e) {
     e.stopPropagation();
 
-    if (!answered[currentIndex]) {
-      answered[currentIndex] = true;
+    const cardIndex = cardOrder[currentIndex];
+
+    if (!answered[cardIndex]) {
+      answered[cardIndex] = true;
       correctCount++;
       updateScore();
     }
