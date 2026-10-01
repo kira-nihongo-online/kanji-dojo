@@ -288,8 +288,8 @@
   /* ★ 追加：スコア管理 */
   let correctCount = 0;
   let answered = [];
-  let learningOrder = "normal";
-  let skipCorrect = false;
+  let learningOrder = localStorage.getItem("kanjiDojoLearningOrder") || "normal";
+  let skipCorrect = localStorage.getItem("kanjiDojoSkipCorrect") === "true";
 
   const API_URL = "https://script.google.com/macros/s/AKfycbz7D_uzRRD9ARfOpK_MQ4IZ1YifyxqJmNPIRFijQJo4zSu14gbI9VnmcOzIwVMRi88/exec";
 
@@ -498,8 +498,11 @@
       learningOrder = selectedOrder;
       skipCorrect = document.getElementById("skipCorrect").checked;
 
-      if (learningOrder === "normal") {
+      // 設定を保存
+      localStorage.setItem("kanjiDojoLearningOrder", learningOrder);
+      localStorage.setItem("kanjiDojoSkipCorrect", skipCorrect);
 
+      if (learningOrder === "normal") {
         // Normalに戻す
         cardOrder = cards.map((_, index) => index);
 
