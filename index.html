@@ -302,7 +302,17 @@
     .then(function(data) {
 
       cards = data || [];
+
       cardOrder = cards.map((_, index) => index);
+
+      // 保存されている設定が Random なら、起動時にシャッフル
+      if (learningOrder === "random") {
+        for (let i = cardOrder.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [cardOrder[i], cardOrder[j]] = [cardOrder[j], cardOrder[i]];
+        }
+      }
+
       currentIndex = 0;
       showingFront = true;
 
