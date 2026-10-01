@@ -287,7 +287,8 @@
   /* ★ 追加：スコア管理 */
   let correctCount = 0;
   let answered = [];
-  let learningMode = "normal";
+  let learningOrder = "normal";
+  let skipCorrect = false;
 
   const API_URL = "https://script.google.com/macros/s/AKfycbz7D_uzRRD9ARfOpK_MQ4IZ1YifyxqJmNPIRFijQJo4zSu14gbI9VnmcOzIwVMRi88/exec";
 
@@ -450,16 +451,20 @@
   const modeModal = document.getElementById("modeModal");
   const modeSettingBtn = document.getElementById("modeSettingBtn");
 
-  let modeBeforeOpen = learningMode;
+  let orderBeforeOpen = learningOrder;
+  let skipCorrectBeforeOpen = skipCorrect;
 
   modeSettingBtn.addEventListener("click", function(e) {
     e.stopPropagation();
 
-    modeBeforeOpen = learningMode;
+    orderBeforeOpen = learningOrder;
+    skipCorrectBeforeOpen = skipCorrect;
 
     document.querySelector(
-      'input[name="learningMode"][value="' + learningMode + '"]'
+      'input[name="learningOrder"][value="' + learningOrder + '"]'
     ).checked = true;
+
+    document.getElementById("skipCorrect").checked = skipCorrect;
 
     document.getElementById("modeModal").style.display = "flex";
   });
@@ -469,11 +474,12 @@
     document.getElementById("modeSaveBtn").addEventListener("click", function(e) {
       e.stopPropagation();
 
-      const selectedMode = document.querySelector(
-        'input[name="learningMode"]:checked'
+      const selectedOrder = document.querySelector(
+        'input[name="learningOrder"]:checked'
       ).value;
 
-      learningMode = selectedMode;
+      learningOrder = selectedOrder;
+      skipCorrect = document.getElementById("skipCorrect").checked;
 
       document.getElementById("modeModal").style.display = "none";
     });
@@ -601,15 +607,28 @@
 
     <h3>学習モード</h3>
 
-    <label>
-      <input type="radio" name="learningMode" value="normal" checked>
-      Normal
-    </label>
+    <div>
+      <div>出題順</div>
 
-    <label>
-      <input type="radio" name="learningMode" value="excludeCorrect">
-      Skip Correct
-    </label>
+      <label>
+        <input type="radio" name="learningOrder" value="normal" checked>
+        Normal
+      </label>
+
+      <label>
+        <input type="radio" name="learningOrder" value="random">
+        Random
+      </label>
+    </div>
+
+    <div>
+      <div>正解済みカード</div>
+
+      <label>
+        <input type="checkbox" id="skipCorrect">
+        Skip Correct
+      </label>
+    </div>
 
     <div class="mode-modal-buttons">
       <button id="modeCancelBtn">キャンセル</button>
